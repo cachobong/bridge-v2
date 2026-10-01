@@ -1,0 +1,21 @@
+{
+  "name": "bridge-v2",
+  "private": true,
+  "packageManager": "pnpm@10.26.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:seed": "pnpm --filter @bridge/api seed",
+    "db:types": "supabase gen types typescript --local --schema public > apps/api/src/lib/database.types.ts"
+  },
+  "devDependencies": {
+    "supabase": "^2.119.0",
+    "turbo": "^2.11.6",
+    "typescript": "^5.9.3"
+  }
+}
