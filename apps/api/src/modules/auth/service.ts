@@ -1,5 +1,5 @@
 import type { CurrentUser, LoginInput, Session } from "@bridge/shared";
-import { conflict, fromDbError, unauthorized } from "../../lib/errors.js";
+import { AppError, conflict, fromDbError, unauthorized } from "../../lib/errors.js";
 import { createAnonClient, db } from "../../lib/supabase.js";
 import { getUserAccess } from "../rbac/index.js";
 
@@ -26,6 +26,8 @@ export async function login({ username, password }: LoginInput): Promise<{ sessi
     email: authUser.user.email,
     password,
   });
+  // A blocked (inactive) user also gets INVALID_LOGIN. Supabase checks the ban before the password,
+  // so a specific message would tell any caller which usernames are inactive.
   if (signInError || !data.session) throw unauthorized(INVALID_LOGIN);
 
   return {
@@ -64,4 +66,10 @@ export async function createUser(input: { username: string; fullName: string; em
     throw fromDbError(profile.error);
   }
   return data.user.id;
+}
+
+// A blocked (banned) user cannot sign in, refresh a session, or pass requireAuth.
+export async function setLoginBlocked(userId: string, blocked: boolean): Promise<void> {
+  const { error } = await db.auth.admin.updateUserById(userId, { ban_duration: blocked ? "876000h" : "none" });
+  if (error) throw new AppError(500, "auth_error", error.message);
 }

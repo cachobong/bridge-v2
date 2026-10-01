@@ -23,7 +23,12 @@
 - A new login made from a worker uses the worker's email and full name and gets the `employee` role.
 - Unlink removes only the link. The user account stays. If the profile is deleted, the link is cleared.
 - A linked user sees their own record at `/me` (`self:read`).
-- An `inactive` worker can still sign in (POC limit).
+- An `inactive` worker cannot sign in. The API bans the linked auth user (Supabase `ban_duration`), so login,
+  token refresh and existing access tokens all fail. Reactivation removes the ban.
+- A failed login always returns "Invalid username or password". Supabase checks the ban before the password,
+  so a specific message would show which usernames are inactive.
+- Linking a login to an inactive worker blocks it at once. Unlinking an inactive worker removes the block.
+- A user cannot deactivate their own worker record.
 
 ## Payroll period rule (bi-monthly)
 - Half 1: day 1 to day 15 of the month.

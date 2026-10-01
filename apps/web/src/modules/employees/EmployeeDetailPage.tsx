@@ -34,8 +34,11 @@ export function EmployeeDetailPage() {
   }
 
   const w = worker.data;
-  const toggleStatus = () =>
+  const toggleStatus = () => {
+    // Deactivation also blocks the linked login (the API bans the user).
+    if (w.status === "active" && w.username && !window.confirm(`Deactivate ${w.firstName}? The login "${w.username}" will be blocked.`)) return;
     update.mutate({ workerType: w.workerType, status: w.status === "active" ? "inactive" : "active" });
+  };
 
   return (
     <div className="max-w-3xl space-y-4">

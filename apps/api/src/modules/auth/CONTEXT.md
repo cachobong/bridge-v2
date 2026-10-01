@@ -9,7 +9,8 @@ Username/password login through Supabase Auth, and the `requireAuth` middleware.
 
 ## Process
 - Login: `profiles.username` (lowercase) → `auth.admin.getUserById` → email → `signInWithPassword` on a new anon client.
-- Return the same 401 message for an unknown username and a wrong password.
+- Return the same 401 message for an unknown username, a wrong password, and a blocked (inactive) user.
+- `setLoginBlocked(userId, blocked)` bans or unbans the auth user. Supabase then rejects sign-in, refresh, and `getUser`.
 - `requireAuth` reads `Authorization: Bearer <token>`, calls `auth.getUser(token)`, and sets `c.get("user")`
   (`CurrentUser` with roles and permissions). Other modules depend on this value.
 - `createUser()` creates the auth user (email confirmed) and its profile; it deletes the auth user if the
@@ -19,4 +20,4 @@ Username/password login through Supabase Auth, and the `requireAuth` middleware.
 ## Outputs
 - `POST /api/auth/login` → `{ session, user }`
 - `GET /api/auth/me` → `CurrentUser`
-- `index.ts`: `authRoutes`, `requireAuth`, `createUser`
+- `index.ts`: `authRoutes`, `requireAuth`, `createUser`, `setLoginBlocked`

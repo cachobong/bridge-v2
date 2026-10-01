@@ -14,6 +14,8 @@ CRUD for workers (normal employees and contractors, in one `workers` table), and
   `toRow()` clears the columns of the other type. The DB check constraint is the final guard.
 - Search uses `ilike` on name, email and job title. Strip PostgREST filter characters first.
 - No delete: set `status` to `inactive`.
+- Status changes go through `service.updateWorker`: inactive → `setLoginBlocked(userId, true)`, active → unblock.
+  Link and unlink keep the block in step with the status (see `_config/domain.md`).
 - Account link (`service.ts`): `workers.user_id` → `profiles.id`, unique both ways. `existing` links a user;
   `new` creates a user from the worker's email and name, with role `employee`. Unlink keeps the user.
 - Register `/me` before `/:id`. The repository joins `profiles(username)` for `Worker.username`.

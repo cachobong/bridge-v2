@@ -6,7 +6,7 @@ import type { AppEnv } from "../../lib/types.js";
 import { validate } from "../../lib/validate.js";
 import { requirePermission } from "../rbac/index.js";
 import * as repo from "./repository.js";
-import { linkAccount, unlinkAccount } from "./service.js";
+import { linkAccount, unlinkAccount, updateWorker } from "./service.js";
 
 const idParam = z.object({ id: z.uuid() });
 
@@ -29,9 +29,7 @@ export const employeeRoutes = new Hono<AppEnv>()
     c.json(await repo.createWorker(c.req.valid("json")), 201),
   )
   .patch("/:id", requirePermission("employees:write"), validate("param", idParam), validate("json", updateWorkerSchema), async (c) => {
-    const worker = await repo.updateWorker(c.req.valid("param").id, c.req.valid("json"));
-    if (!worker) throw notFound("Worker not found");
-    return c.json(worker);
+    return c.json(await updateWorker(c.req.valid("param").id, c.req.valid("json"), c.get("user").id));
   })
   .post(
     "/:id/account",
