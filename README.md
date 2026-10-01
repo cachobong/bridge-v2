@@ -21,6 +21,10 @@ pnpm dev                      # API on :8787, web on :5173
 
 Demo users (password `Password123!`): `admin`, `hr`, `payroll`, `viewer`, and `maria` (role `employee`, linked to the worker Maria Lopez; sees only "My profile"). See [`_config/rbac.md`](_config/rbac.md) for what each role can do.
 
+## Hosted Supabase
+The repository is linked to the project `uxqncjmzlmdzlavqmhin`. Apply new migrations with `pnpm exec supabase db push`.
+Do not run `pnpm db:seed` on the hosted project. Use `pnpm db:seed:admin` with a strong `SEED_ADMIN_PASSWORD`, then remove that line from `.env`.
+
 ## Scripts
 | Script | Does |
 |--------|------|
@@ -28,4 +32,5 @@ Demo users (password `Password123!`): `admin`, `hr`, `payroll`, `viewer`, and `m
 | `pnpm typecheck` / `pnpm test` / `pnpm build` | Checks (run all three before you push) |
 | `pnpm db:reset` | Recreate the local database from migrations |
 | `pnpm db:types` | Regenerate `apps/api/src/lib/database.types.ts` |
-| `pnpm db:seed` | Create demo data (safe to run more than once) |
+| `pnpm db:seed` | Create demo data, local only (safe to run more than once) |
+| `pnpm db:seed:admin` | Create one admin from `SEED_ADMIN_*` in `.env` (for a hosted project) |

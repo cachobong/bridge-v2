@@ -11,6 +11,7 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:seed": "pnpm --filter @bridge/api seed",
+    "db:seed:admin": "pnpm --filter @bridge/api seed:admin",
     "db:types": "supabase gen types typescript --local --schema public > apps/api/src/lib/database.types.ts"
   },
   "devDependencies": {

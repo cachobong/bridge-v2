@@ -1,7 +1,14 @@
 // Creates demo users (one per role) and sample workers. Safe to run more than once.
 // Usage: pnpm db:seed
 import type { Role } from "@bridge/shared";
+import { env } from "../src/lib/env.js";
 import { db } from "../src/lib/supabase.js";
+
+// Demo users have a known password. Never create them on a hosted project.
+if (!/^http:\/\/(127\.0\.0\.1|localhost)[:/]/.test(env.SUPABASE_URL)) {
+  console.error(`Refusing to seed demo data into ${env.SUPABASE_URL}. Use pnpm db:seed:admin for a hosted project.`);
+  process.exit(1);
+}
 
 const PASSWORD = "Password123!";
 

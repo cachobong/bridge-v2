@@ -18,3 +18,4 @@ Hono API for Bridge. One process, one module per business capability (modular mo
 ## Outputs
 - `apps/api/src/modules/{auth,rbac,employees,payroll}` → `/api/auth`, `/api/rbac`, `/api/employees`, `/api/payroll-periods`
 - `apps/api/scripts/seed.ts` (`pnpm db:seed`): demo users `admin`, `hr`, `payroll`, `viewer`, `maria` (password `Password123!`), 5 workers; `maria` is linked to the worker Maria Lopez
+- `apps/api/scripts/seed-admin.ts` (`pnpm db:seed:admin`): one admin from `SEED_ADMIN_USERNAME` / `SEED_ADMIN_PASSWORD` / `SEED_ADMIN_EMAIL`. The only seed for a hosted project
