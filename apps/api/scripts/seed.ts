@@ -10,6 +10,8 @@ const users: { username: string; fullName: string; role: Role }[] = [
   { username: "hr", fullName: "Hana Reyes", role: "hr" },
   { username: "payroll", fullName: "Paolo Santos", role: "payroll" },
   { username: "viewer", fullName: "Vera Cruz", role: "viewer" },
+  // Linked to the worker Maria Lopez in linkWorkerAccounts().
+  { username: "maria", fullName: "Maria Lopez", role: "employee" },
 ];
 
 async function seedUsers() {
@@ -20,7 +22,7 @@ async function seedUsers() {
       continue;
     }
     const { data, error } = await db.auth.admin.createUser({
-      email: `${u.username}@bridge.local`,
+      email: u.username === "maria" ? "maria.lopez@example.com" : `${u.username}@bridge.local`,
       password: PASSWORD,
       email_confirm: true,
     });
@@ -52,6 +54,18 @@ async function seedWorkers() {
   console.log("workers: created 5");
 }
 
+async function linkWorkerAccounts() {
+  const { data: profile } = await db.from("profiles").select("id").eq("username", "maria").single();
+  const { error } = await db
+    .from("workers")
+    .update({ user_id: profile?.id })
+    .eq("email", "maria.lopez@example.com")
+    .is("user_id", null);
+  if (error) throw error;
+  console.log("worker Maria Lopez: linked to user maria");
+}
+
 await seedUsers();
 await seedWorkers();
+await linkWorkerAccounts();
 console.log(`Done. Demo password for all users: ${PASSWORD}`);

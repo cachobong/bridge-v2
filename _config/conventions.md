@@ -27,7 +27,7 @@ After a schema change: `pnpm db:reset` then `pnpm db:types` then `pnpm db:seed`.
 | `index.ts` | Public exports. The only file other modules import. |
 | `routes.ts` | Hono router: permission, validation, call repository or service |
 | `repository.ts` | Supabase queries and row ↔ type mapping |
-| `service.ts` | Business logic, only when a module has some (auth, payroll) |
+| `service.ts` | Business logic, only when a module has some (auth, employees, payroll) |
 | `middleware.ts` | Hono middleware the module exports (auth, rbac) |
 
 ## Validation and errors

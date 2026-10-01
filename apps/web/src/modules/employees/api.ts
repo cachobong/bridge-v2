@@ -1,4 +1,4 @@
-import type { CreateWorkerInput, UpdateWorkerInput, Worker, WorkerStatus, WorkerType } from "@bridge/shared";
+import type { CreateWorkerInput, LinkAccountInput, UpdateWorkerInput, Worker, WorkerStatus, WorkerType } from "@bridge/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../lib/api";
 
@@ -47,4 +47,34 @@ export function useUpdateWorker(id: string) {
       return queryClient.invalidateQueries({ queryKey: ["employees", "list"] });
     },
   });
+}
+
+// The worker linked to the signed-in user. 404 when no worker is linked.
+export function useMyWorker() {
+  return useQuery({ queryKey: ["employees", "me"], queryFn: () => api<Worker>("/employees/me"), retry: false });
+}
+
+function useAccountMutation<TInput>(id: string, request: (input: TInput) => Promise<Worker>) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: request,
+    onSuccess: (worker) => {
+      queryClient.setQueryData(["employees", "detail", id], worker);
+      // A new login also changes the users list.
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["employees", "list"] }),
+        queryClient.invalidateQueries({ queryKey: ["rbac", "users"] }),
+      ]);
+    },
+  });
+}
+
+export function useLinkAccount(id: string) {
+  return useAccountMutation(id, (input: LinkAccountInput) =>
+    api<Worker>(`/employees/${encodeURIComponent(id)}/account`, { method: "POST", body: input }),
+  );
+}
+
+export function useUnlinkAccount(id: string) {
+  return useAccountMutation(id, () => api<Worker>(`/employees/${encodeURIComponent(id)}/account`, { method: "DELETE" }));
 }

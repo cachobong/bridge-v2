@@ -19,7 +19,7 @@ pnpm db:seed                  # demo users and workers
 pnpm dev                      # API on :8787, web on :5173
 ```
 
-Demo users (password `Password123!`): `admin`, `hr`, `payroll`, `viewer`. See [`_config/rbac.md`](_config/rbac.md) for what each role can do.
+Demo users (password `Password123!`): `admin`, `hr`, `payroll`, `viewer`, and `maria` (role `employee`, linked to the worker Maria Lopez; sees only "My profile"). See [`_config/rbac.md`](_config/rbac.md) for what each role can do.
 
 ## Scripts
 | Script | Does |

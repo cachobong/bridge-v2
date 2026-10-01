@@ -3,7 +3,10 @@ import { fromDbError } from "../../lib/errors.js";
 import { db } from "../../lib/supabase.js";
 import type { Tables, TablesInsert } from "../../lib/database.types.js";
 
-type WorkerRow = Tables<"workers">;
+// Joins the linked profile so the API can return the login username.
+const WORKER_SELECT = "*, profiles(username)";
+
+type WorkerRow = Tables<"workers"> & { profiles: { username: string } | null };
 
 function toWorker(r: WorkerRow): Worker {
   return {
@@ -20,6 +23,8 @@ function toWorker(r: WorkerRow): Worker {
     companyName: r.company_name,
     hourlyRate: r.hourly_rate,
     contractEndDate: r.contract_end_date,
+    userId: r.user_id,
+    username: r.profiles?.username ?? null,
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };
@@ -49,7 +54,7 @@ function toRow(input: Partial<CreateWorkerInput> & Pick<CreateWorkerInput, "work
 }
 
 export async function listWorkers(query: ListWorkersQuery): Promise<Worker[]> {
-  let q = db.from("workers").select("*").order("last_name").order("first_name");
+  let q = db.from("workers").select(WORKER_SELECT).order("last_name").order("first_name");
   if (query.type) q = q.eq("worker_type", query.type);
   if (query.status) q = q.eq("status", query.status);
   if (query.search) {
@@ -63,7 +68,7 @@ export async function listWorkers(query: ListWorkersQuery): Promise<Worker[]> {
 }
 
 export async function getWorker(id: string): Promise<Worker | null> {
-  const { data, error } = await db.from("workers").select("*").eq("id", id).maybeSingle();
+  const { data, error } = await db.from("workers").select(WORKER_SELECT).eq("id", id).maybeSingle();
   if (error) throw fromDbError(error);
   return data ? toWorker(data) : null;
 }
@@ -72,14 +77,26 @@ export async function createWorker(input: CreateWorkerInput): Promise<Worker> {
   const { data, error } = await db
     .from("workers")
     .insert(toRow(input) as TablesInsert<"workers">)
-    .select("*")
+    .select(WORKER_SELECT)
     .single();
   if (error) throw fromDbError(error);
   return toWorker(data);
 }
 
 export async function updateWorker(id: string, input: UpdateWorkerInput): Promise<Worker | null> {
-  const { data, error } = await db.from("workers").update(toRow(input)).eq("id", id).select("*").maybeSingle();
+  const { data, error } = await db.from("workers").update(toRow(input)).eq("id", id).select(WORKER_SELECT).maybeSingle();
   if (error) throw fromDbError(error);
   return data ? toWorker(data) : null;
+}
+
+export async function getWorkerByUserId(userId: string): Promise<Worker | null> {
+  const { data, error } = await db.from("workers").select(WORKER_SELECT).eq("user_id", userId).maybeSingle();
+  if (error) throw fromDbError(error);
+  return data ? toWorker(data) : null;
+}
+
+export async function setWorkerUser(id: string, userId: string | null): Promise<Worker> {
+  const { data, error } = await db.from("workers").update({ user_id: userId }).eq("id", id).select(WORKER_SELECT).single();
+  if (error) throw fromDbError(error);
+  return toWorker(data);
 }

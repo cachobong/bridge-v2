@@ -70,6 +70,24 @@ export interface Worker {
   companyName: string | null;
   hourlyRate: number | null;
   contractEndDate: string | null;
+  // Linked login account, if any.
+  userId: string | null;
+  username: string | null;
   createdAt: string;
   updatedAt: string;
 }
+
+// Link a worker to a login: an existing user, or a new user made from the worker's email and name.
+export const linkAccountSchema = z.discriminatedUnion("mode", [
+  z.object({ mode: z.literal("existing"), userId: z.uuid() }),
+  z.object({
+    mode: z.literal("new"),
+    username: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .regex(/^[a-z0-9._-]{2,32}$/, "2-32 characters: a-z, 0-9, dot, underscore, hyphen"),
+    password: z.string().min(8),
+  }),
+]);
+export type LinkAccountInput = z.infer<typeof linkAccountSchema>;

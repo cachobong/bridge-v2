@@ -16,5 +16,5 @@ Assign roles to users and show the read-only role/permission matrix.
 - Matrix rows come from shared `PERMISSIONS`; columns come from `GET /api/rbac/roles`.
 
 ## Outputs
-- `index.ts`: `RbacPage`
+- `index.ts`: `RbacPage`, `useUsers` (used by the employees module to link an existing user)
 - Route: `/rbac` (guarded by `rbac:read` in `App.tsx`)

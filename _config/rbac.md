@@ -12,19 +12,23 @@ Users have one or more roles. Roles grant permissions. The API checks permission
 | `payroll_periods:write` | Generate, close and reopen payroll periods |
 | `rbac:read` | List users, roles and permissions |
 | `rbac:write` | Assign roles to users |
+| `self:read` | View the own linked worker record (`/me`) |
 
 ## Role matrix
-| Permission | admin | hr | payroll | viewer |
-|------------|:-----:|:--:|:-------:|:------:|
-| employees:read | ✓ | ✓ | ✓ | ✓ |
-| employees:write | ✓ | ✓ | | |
-| payroll_periods:read | ✓ | ✓ | ✓ | ✓ |
-| payroll_periods:write | ✓ | | ✓ | |
-| rbac:read | ✓ | | | |
-| rbac:write | ✓ | | | |
+| Permission | admin | hr | payroll | viewer | employee |
+|------------|:-----:|:--:|:-------:|:------:|:--------:|
+| employees:read | ✓ | ✓ | ✓ | ✓ | |
+| employees:write | ✓ | ✓ | | | |
+| payroll_periods:read | ✓ | ✓ | ✓ | ✓ | |
+| payroll_periods:write | ✓ | | ✓ | | |
+| rbac:read | ✓ | | | | |
+| rbac:write | ✓ | | | | |
+| self:read | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+Create, link or unlink a worker's login needs both `employees:write` and `rbac:write` (only `admin` today).
 
 ## Where it lives
-- Source of truth: rows in `roles`, `permissions`, `role_permissions` (seeded in the init migration).
+- Source of truth: rows in `roles`, `permissions`, `role_permissions` (seeded in the migrations).
 - Type-safe keys: `packages/shared/src/rbac.ts` (`PERMISSIONS`, `ROLES`). Keep it in sync with the migration.
 - Enforcement: `requirePermission(...)` in `apps/api/src/modules/rbac/middleware.ts`.
 

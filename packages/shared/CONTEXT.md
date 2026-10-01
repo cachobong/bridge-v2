@@ -14,5 +14,5 @@ Types, zod schemas and pure domain rules that the API and the web app both use.
 ## Outputs
 - `src/payroll/periods.ts` (+ `periods.test.ts`): `periodFor`, `periodsForMonth`, `periodsForYear`, `periodContaining`, `lastDayOfMonth`
 - `src/rbac.ts`: `PERMISSIONS`, `ROLES`
-- `src/schemas/{auth,employees,payroll,rbac}.ts`
+- `src/schemas/{auth,employees,payroll,rbac}.ts` (`employees.ts` also has `linkAccountSchema`)
 - `src/index.ts`: re-exports everything

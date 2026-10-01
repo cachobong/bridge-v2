@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router";
 import { LoginPage, RequireAuth, RequirePermission } from "./modules/auth";
-import { EmployeeDetailPage, EmployeesPage } from "./modules/employees";
+import { EmployeeDetailPage, EmployeesPage, MyProfilePage } from "./modules/employees";
 import { AppLayout, HomeRedirect } from "./modules/layout";
 import { PayrollPeriodsPage } from "./modules/payroll";
 import { RbacPage } from "./modules/rbac";
@@ -21,6 +21,9 @@ export default function App() {
           </Route>
           <Route element={<RequirePermission permission="rbac:read" />}>
             <Route path="rbac" element={<RbacPage />} />
+          </Route>
+          <Route element={<RequirePermission permission="self:read" />}>
+            <Route path="me" element={<MyProfilePage />} />
           </Route>
         </Route>
       </Route>

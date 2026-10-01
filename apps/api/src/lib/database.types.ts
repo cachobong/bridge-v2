@@ -109,16 +109,22 @@ isOneToOne: false
                   ]
                 },"workers": {
                   Row: {
-                    "company_name": string | null,"contract_end_date": string | null,"created_at": string,"department": string | null,"email": string,"first_name": string,"hourly_rate": number | null,"id": string,"job_title": string,"last_name": string,"monthly_salary": number | null,"start_date": string,"status": Database["public"]['Enums']["worker_status"],"updated_at": string,"worker_type": Database["public"]['Enums']["worker_type"]
+                    "company_name": string | null,"contract_end_date": string | null,"created_at": string,"department": string | null,"email": string,"first_name": string,"hourly_rate": number | null,"id": string,"job_title": string,"last_name": string,"monthly_salary": number | null,"start_date": string,"status": Database["public"]['Enums']["worker_status"],"updated_at": string,"user_id": string | null,"worker_type": Database["public"]['Enums']["worker_type"]
                   }
                   Insert: {
-                    "company_name"?: string | null,"contract_end_date"?: string | null,"created_at"?: string,"department"?: string | null,"email": string,"first_name": string,"hourly_rate"?: number | null,"id"?: string,"job_title": string,"last_name": string,"monthly_salary"?: number | null,"start_date": string,"status"?: Database["public"]['Enums']["worker_status"],"updated_at"?: string,"worker_type": Database["public"]['Enums']["worker_type"]
+                    "company_name"?: string | null,"contract_end_date"?: string | null,"created_at"?: string,"department"?: string | null,"email": string,"first_name": string,"hourly_rate"?: number | null,"id"?: string,"job_title": string,"last_name": string,"monthly_salary"?: number | null,"start_date": string,"status"?: Database["public"]['Enums']["worker_status"],"updated_at"?: string,"user_id"?: string | null,"worker_type": Database["public"]['Enums']["worker_type"]
                   }
                   Update: {
-                    "company_name"?: string | null,"contract_end_date"?: string | null,"created_at"?: string,"department"?: string | null,"email"?: string,"first_name"?: string,"hourly_rate"?: number | null,"id"?: string,"job_title"?: string,"last_name"?: string,"monthly_salary"?: number | null,"start_date"?: string,"status"?: Database["public"]['Enums']["worker_status"],"updated_at"?: string,"worker_type"?: Database["public"]['Enums']["worker_type"]
+                    "company_name"?: string | null,"contract_end_date"?: string | null,"created_at"?: string,"department"?: string | null,"email"?: string,"first_name"?: string,"hourly_rate"?: number | null,"id"?: string,"job_title"?: string,"last_name"?: string,"monthly_salary"?: number | null,"start_date"?: string,"status"?: Database["public"]['Enums']["worker_status"],"updated_at"?: string,"user_id"?: string | null,"worker_type"?: Database["public"]['Enums']["worker_type"]
                   }
                   Relationships: [
-                    
+                    {
+      foreignKeyName: "workers_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: true
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
                   ]
                 }
           }

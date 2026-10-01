@@ -112,7 +112,10 @@ export function EmployeesPage() {
                   <div className="font-medium text-slate-900">
                     {w.firstName} {w.lastName}
                   </div>
-                  <div className="text-xs text-slate-500">{w.email}</div>
+                  <div className="text-xs text-slate-500">
+                    {w.email}
+                    {w.username && <span title="Has a login account"> · login: {w.username}</span>}
+                  </div>
                 </td>
                 <td className="px-4 py-3">
                   <WorkerTypeBadge type={w.workerType} />

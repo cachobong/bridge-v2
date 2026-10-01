@@ -7,6 +7,8 @@ const NAV_ITEMS: { to: string; label: string; permission: Permission }[] = [
   { to: "/employees", label: "Employees", permission: "employees:read" },
   { to: "/payroll-periods", label: "Payroll Periods", permission: "payroll_periods:read" },
   { to: "/rbac", label: "Users & Roles", permission: "rbac:read" },
+  // Last, so `/` picks it only for users with no other page (for example the employee role).
+  { to: "/me", label: "My profile", permission: "self:read" },
 ];
 
 export function AppLayout() {

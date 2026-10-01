@@ -1,22 +1,13 @@
-import type { ReactNode } from "react";
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { errorMessage } from "../../lib/api";
-import { formatAmount, formatDate } from "../../lib/format";
 import { btnPrimary, btnSecondary, ErrorBox } from "../../lib/ui";
 import { useAuth } from "../auth";
+import { AccountSection } from "./AccountSection";
 import { useUpdateWorker, useWorker } from "./api";
+import { WorkerDetails } from "./WorkerDetails";
 import { WorkerForm } from "./WorkerForm";
 import { WorkerStatusBadge, WorkerTypeBadge } from "./WorkerTypeBadge";
-
-function Item({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div>
-      <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</dt>
-      <dd className="mt-1 text-sm text-slate-900">{children}</dd>
-    </div>
-  );
-}
 
 export function EmployeeDetailPage() {
   const { id = "" } = useParams();
@@ -94,24 +85,12 @@ export function EmployeeDetailPage() {
                 <ErrorBox>{errorMessage(update.error)}</ErrorBox>
               </div>
             )}
-            <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <Item label="Email">{w.email}</Item>
-              <Item label="Job title">{w.jobTitle}</Item>
-              <Item label="Department">{w.department ?? "—"}</Item>
-              <Item label="Start date">{formatDate(w.startDate)}</Item>
-              {w.workerType === "employee" ? (
-                <Item label="Monthly salary">{formatAmount(w.monthlySalary)}</Item>
-              ) : (
-                <>
-                  <Item label="Hourly rate">{formatAmount(w.hourlyRate)}</Item>
-                  <Item label="Company">{w.companyName ?? "—"}</Item>
-                  <Item label="Contract end date">{formatDate(w.contractEndDate)}</Item>
-                </>
-              )}
-            </dl>
+            <WorkerDetails worker={w} />
           </>
         )}
       </div>
+
+      <AccountSection worker={w} />
     </div>
   );
 }

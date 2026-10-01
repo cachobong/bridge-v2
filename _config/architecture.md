@@ -9,7 +9,8 @@ Module rules:
 - A module exposes its public API in `index.ts`. Other modules import **only** from `../<module>/index.js`.
 - Allowed dependencies (no cycles):
   - `auth` → `rbac` (reads roles and permissions for the signed-in user)
-  - `employees` → `rbac` (`requirePermission`)
+  - `employees` → `rbac` (`requirePermission`, `setUserRoles`)
+  - `employees` → `auth` (`createUser`, to make a login for a worker)
   - `payroll` → `rbac` (`requirePermission`)
   - `rbac` → nothing (it reads `c.get("user")`, which `auth` sets)
 - Code shared by API and web (types, zod schemas, pure domain rules) lives in `packages/shared`.

@@ -12,9 +12,11 @@ Username/password login through Supabase Auth, and the `requireAuth` middleware.
 - Return the same 401 message for an unknown username and a wrong password.
 - `requireAuth` reads `Authorization: Bearer <token>`, calls `auth.getUser(token)`, and sets `c.get("user")`
   (`CurrentUser` with roles and permissions). Other modules depend on this value.
+- `createUser()` creates the auth user (email confirmed) and its profile; it deletes the auth user if the
+  profile insert fails. 409 for a taken username or email.
 - Owns table `profiles`.
 
 ## Outputs
 - `POST /api/auth/login` → `{ session, user }`
 - `GET /api/auth/me` → `CurrentUser`
-- `index.ts`: `authRoutes`, `requireAuth`
+- `index.ts`: `authRoutes`, `requireAuth`, `createUser`

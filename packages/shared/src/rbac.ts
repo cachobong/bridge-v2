@@ -6,10 +6,11 @@ export const PERMISSIONS = [
   "payroll_periods:write",
   "rbac:read",
   "rbac:write",
+  "self:read",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
 
-export const ROLES = ["admin", "hr", "payroll", "viewer"] as const;
+export const ROLES = ["admin", "hr", "payroll", "viewer", "employee"] as const;
 
 export type Role = (typeof ROLES)[number];

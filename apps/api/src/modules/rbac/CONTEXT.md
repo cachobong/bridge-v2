@@ -16,4 +16,4 @@ Roles, permissions, user-role assignment, and the `requirePermission` middleware
 - `GET /api/rbac/roles` → `RoleDefinition[]` (`rbac:read`)
 - `GET /api/rbac/users` → `UserWithRoles[]` (`rbac:read`)
 - `PUT /api/rbac/users/:id/roles` body `{ roles }` → `UserWithRoles` (`rbac:write`)
-- `index.ts`: `rbacRoutes`, `requirePermission`, `getUserAccess`
+- `index.ts`: `rbacRoutes`, `requirePermission`, `getUserAccess`, `setUserRoles`
